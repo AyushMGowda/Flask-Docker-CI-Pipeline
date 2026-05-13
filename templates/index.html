@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TaskFlow DevOps Dashboard</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 40px auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #38bdf8;
+        }
+
+        .info-box {
+            background: #1e293b;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .task-form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 12px 20px;
+            background: #38bdf8;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: black;
+            font-weight: bold;
+        }
+
+        .task {
+            background: #1e293b;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .completed {
+            color: #22c55e;
+            font-weight: bold;
+        }
+
+        .pending {
+            color: #facc15;
+            font-weight: bold;
+        }
+
+        .actions a {
+            text-decoration: none;
+            margin-left: 10px;
+            color: #38bdf8;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: gray;
+        }
+
+        .pipeline {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 20px;
+            color: #38bdf8;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🚀 TaskFlow DevOps Dashboard</h1>
+
+    <div class="info-box">
+        <p><strong>Container Hostname:</strong> {{ hostname }}</p>
+        <p><strong>Current Time:</strong> {{ current_time }}</p>
+        <p><strong>CI/CD Status:</strong> ✅ Active</p>
+        <p><strong>Docker Container:</strong> Running</p>
+    </div>
+
+    <form class="task-form" action="/add" method="POST">
+        <input type="text" name="task" placeholder="Enter new task..." required>
+        <button type="submit">Add Task</button>
+    </form>
+
+    {% for task in tasks %}
+    <div class="task">
+
+        <div>
+            <h3>{{ task.title }}</h3>
+
+            {% if task.status == "Completed" %}
+                <span class="completed">Completed</span>
+            {% else %}
+                <span class="pending">Pending</span>
+            {% endif %}
+        </div>
+
+        <div class="actions">
+            <a href="/complete/{{ loop.index0 }}">Complete</a>
+            <a href="/delete/{{ loop.index0 }}">Delete</a>
+        </div>
+
+    </div>
+    {% endfor %}
+
+    <div class="pipeline">
+        GitHub → GitHub Actions → Jenkins → Docker → Flask Deployment
+    </div>
+
+    <div class="footer">
+        Powered by Flask • Docker • Jenkins • GitHub Actions
+    </div>
+
+</div>
+
+</body>
+</html>
